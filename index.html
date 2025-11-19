@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Redirecting to Gemini Casino…</title>
+
+<style>
+  body {
+    margin: 0;
+    background: #05060a url("https://tkcapp.simdif.com/images/public/sd_6919402a8d965.jpg?no_cache=1763266124") center/cover no-repeat fixed;
+    font-family: system-ui, sans-serif;
+    color: #f0f4ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    backdrop-filter: blur(4px);
+  }
+  .card {
+    width: 95%;
+    max-width: 680px;
+    background: rgba(0,0,0,0.65);
+    padding: 28px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 24px rgba(0,0,0,0.4);
+  }
+  .logo-wrap {
+    text-align: center;
+  }
+  .logo-wrap img {
+    width: 120px;
+    margin-bottom: 14px;
+  }
+  h1 { font-size: 24px; text-align: center; margin: 10px 0 4px; }
+  p { text-align: center; color: #c7d0dd; margin-top: 0; }
+  #counter {
+    font-size: 46px; font-weight: 800; text-align: center; color: #00f5d4;
+  }
+  .progress { height: 12px; background: rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; margin-top: 14px; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, #00f5d4, #0090ff); transition: width .2s linear; }
+  .btn {
+    display: block; margin: 20px auto 0; padding: 12px 22px;
+    background: #00f5d4; color: #002b1e; border-radius: 10px;
+    text-align: center; font-weight: 700; text-decoration: none;
+    width: fit-content; box-shadow: 0 4px 20px rgba(0,245,212,0.4);
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo-wrap">
+    <img src="https://tkcapp.simdif.com/images/public/sd_6917687f3cee9.jpg?no_cache=1763145362" alt="Gemini Casino" />
+  </div>
+  <h1>Redirecting you to Gemini Casino…</h1>
+  <p>Your bonus page is loading. Hang tight.</p>
+  <div id="counter">6</div>
+  <div class="progress"><div id="bar" class="bar"></div></div>
+  <a id="gotoNow" class="btn" href="#">Go Now</a>
+</div>
+
+<script>
+  const TARGET = "/go";
+  const TRACKING_ENDPOINT = "/track";
+
+  function track(evt, extra={}) {
+    fetch(TRACKING_ENDPOINT, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ event: evt, ...extra })
+    });
+  }
+
+  track("page_view");
+
+  document.addEventListener("click", e => {
+    track("click", { tag: e.target.tagName });
+  });
+
+  let seconds = 6;
+  const counterEl = document.getElementById("counter");
+  const barEl = document.getElementById("bar");
+  const go = document.getElementById("gotoNow");
+  go.href = TARGET;
+
+  const intv = setInterval(()=>{
+    seconds--;
+    counterEl.textContent = seconds;
+    barEl.style.width = ((6-seconds)/6)*100 + "%";
+    if(seconds <= 0){
+      clearInterval(intv);
+      track("auto_redirect");
+      window.location.href = TARGET;
+    }
+  },1000);
+
+  go.addEventListener("click", ()=>{
+    track("manual_redirect");
+    window.location.href = TARGET;
+  });
+</script>
+</body>
+</html>
